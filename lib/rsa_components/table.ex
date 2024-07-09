@@ -38,7 +38,7 @@ defmodule RsaComponents.Table do
     <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
       <table class="w-[40rem] mt-11 sm:w-full">
         <.table_header>
-          <.table_row is_header="false">
+          <.table_row is_header={false}>
             <.table_head :for={col <- @col} class="w-[100px]">
               <%= col[:label] %>
             </.table_head>

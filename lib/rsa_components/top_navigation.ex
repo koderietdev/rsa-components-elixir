@@ -3,6 +3,10 @@ defmodule RsaComponents.TopNavigation do
 
   import RsaComponents.CoreComponents
 
+  slot :menu_item, doc: "Menu items to render in main menu", required: true do
+    attr(:href, :string)
+  end
+
   def top_navigation(assigns) do
     ~H"""
     <header class="px-4 sm:px-6 lg:px-16">
@@ -14,22 +18,11 @@ defmodule RsaComponents.TopNavigation do
         </div>
         <nav class="flex w-full pl-10 py-2 gap-10 justify-end">
           <.link
-            navigate="/admin/inquiries"
+            :for={item <- @menu_item}
+            navigate={item[:path]}
             class="font-medium leading-6 hover:text-zinc-700 hover:underline"
           >
-            Leads
-          </.link>
-          <.link
-            navigate="/admin/recipient-groups"
-            class="font-medium leading-6 hover:text-zinc-700 hover:underline"
-          >
-            Recipient Groups
-          </.link>
-          <.link
-            navigate="/admin/pages"
-            class="font-medium leading-6 hover:text-zinc-700 hover:underline"
-          >
-            Pages
+            <%= render_slot(item) %>
           </.link>
           <div class="cursor-pointer" phx-click={show_drawer("#drawer", "flex")}>
             <.menu_icon />
@@ -57,11 +50,14 @@ defmodule RsaComponents.TopNavigation do
           <.drawer_link href="https://auth.rsa-dev.com/admin/">
             Auth Admin
           </.drawer_link>
-          <.drawer_link href="https://marketing.rsa-dev.com/admin/">
-            Marketing Admin
-          </.drawer_link>
           <.drawer_link href="https://infoweb.rsa-dev.com/admin">
             Infoweb Admin
+          </.drawer_link>
+          <.drawer_link href="https://leads.rsa-dev.com/">
+            Leads Admin
+          </.drawer_link>
+          <.drawer_link href="https://marketing.rsa-dev.com/admin/">
+            Marketing Admin
           </.drawer_link>
         </nav>
       </div>

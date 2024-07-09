@@ -35,7 +35,11 @@ defmodule RsaComponents.CoreComponents do
       transition: {"ease-out duration-150", "translate-x-full", "translate-x-0"},
       time: 150
     )
-    |> JS.show(to: "#drawer-backdrop")
+    |> JS.show(
+      to: "#{selector}-backdrop",
+      transition: {"ease-in duration-150", "opacity-0", "opacity-110"},
+      time: 150
+    )
   end
 
   def hide_drawer(selector) do
@@ -44,6 +48,10 @@ defmodule RsaComponents.CoreComponents do
       transition: {"ease-in duration-150", "translate-x-0", "translate-x-full"},
       time: 150
     )
-    |> JS.hide(to: "#drawer-backdrop")
+    |> JS.hide(
+      to: "#{selector}-backdrop",
+      transition: {"ease-in duration-150", "opacity-100", "opacity-0"},
+      time: 150
+    )
   end
 end
