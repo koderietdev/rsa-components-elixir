@@ -26,8 +26,10 @@ defmodule RsaComponents do
       ],
       tbody_td_attrs: [
         class: [
-          "first:font-bold group:hover:bg-neutral-25 px-1 py-3 align-middle [&:has([role=checkbox])]:pr-0",
-          ["lg:px-3 lg:py-5"]
+          "group:hover:bg-neutral-25 px-1 py-3 align-middle [&:has([role=checkbox])]:pr-0",
+          "first:font-bold first:pl-3",
+          "last:pr-3",
+          "lg:px-1.5 lg:py-5"
         ]
       ]
     ]

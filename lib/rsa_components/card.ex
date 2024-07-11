@@ -3,18 +3,31 @@ defmodule RsaComponents.Card do
 
   attr :fixed_height, :boolean, default: false
   attr :class, :string, default: nil
+
+  slot :header do
+    attr :class, :string
+  end
+
   slot :inner_block, required: true
 
   def card(assigns) do
     ~H"""
     <div class={
       classes([
-        "flex flex-1 flex-col  bg-white shadow-sm rounded-xl p-8",
+        "flex flex-1 flex-col bg-white shadow-sm rounded-xl p-8",
         @fixed_height && "h-[248px] justify-between",
+        length(@header) > 0 && "p-0",
         @class
       ])
     }>
-      <%= render_slot(assigns.inner_block) %>
+      <%= for header <- @header do %>
+        <div class={classes(["px-10 py-8 font-bold border-b border-b-neutral-50", header[:class]])}>
+          <%= render_slot(@header) %>
+        </div>
+      <% end %>
+      <div class="px-10 py-3">
+        <%= render_slot(@inner_block) %>
+      </div>
     </div>
     """
   end
@@ -29,15 +42,22 @@ defmodule RsaComponents.Card do
 
   def number_card(assigns) do
     ~H"""
-    <.card class={@class} fixed_height={@fixed_height}>
+    <div class={
+      classes([
+        "flex flex-1 flex-col bg-white shadow-sm rounded-xl p-8",
+        @fixed_height && "h-[248px] justify-between",
+        @class
+      ])
+    }>
       <span class="text-xl font-bold"><%= @title %></span>
       <div class={[
         "text-5xl font-semibold",
-        @number == 0 && "text-neutral-100"
+        @number == 0 && "text-neutral-100",
+        @number > 0 && "text-brand-500"
       ]}>
         <%= @number %>
       </div>
-    </.card>
+    </div>
     """
   end
 
