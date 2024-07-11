@@ -71,7 +71,9 @@ defmodule RsaComponents.Card do
     default: &Function.identity/1,
     doc: "the function for mapping each item before calling the :item slot"
 
-  slot :header, required: true
+  slot :header do
+    attr :class, :string
+  end
 
   slot :item, doc: "List items to render in the card" do
     attr(:title, :string)
@@ -81,10 +83,18 @@ defmodule RsaComponents.Card do
 
   def list_card(assigns) do
     ~H"""
-    <.card class={classes(["p-0", @class])}>
-      <div class="px-10 py-8 text-xl font-bold pb-8 border-b-neutral-50 border-b">
-        <%= render_slot(@header) %>
-      </div>
+    <div class={
+      classes([
+        "flex flex-1 flex-col bg-white shadow-sm rounded-xl p-8",
+        length(@header) > 0 && "p-0",
+        @class
+      ])
+    }>
+      <%= for header <- @header do %>
+        <div class={classes(["px-10 py-8 font-bold border-b border-b-neutral-50", header[:class]])}>
+          <%= render_slot(@header) %>
+        </div>
+      <% end %>
       <div class="pb-8 px-10">
         <%= if length(@items) > 0 do %>
           <ul class="">
@@ -99,7 +109,7 @@ defmodule RsaComponents.Card do
           <%= render_slot(@empty_list) %>
         <% end %>
       </div>
-    </.card>
+    </div>
     """
   end
 end
