@@ -84,7 +84,7 @@ defmodule RsaComponents.Table do
     ~H"""
     <thead
       class={
-        classes(["[&_tr]:border-b bg-[#F8F9FD] text-sm  py-2 px-4 font-bold font-normal", @class])
+        classes(["[&_tr]:border-b bg-neutral-25 text-sm  py-2 px-4 font-bold font-normal", @class])
       }
       {@rest}
     >
@@ -104,7 +104,7 @@ defmodule RsaComponents.Table do
       class={
         classes([
           "border-b transition-colors text-sm hover:bg-muted/50 data-[state=selected]:bg-muted",
-          ["relative p-0 group", !@is_header && "hover:bg-[#F8F9FD]"],
+          ["relative p-0 group", !@is_header && "hover:bg-neutral-25"],
           @class
         ])
       }

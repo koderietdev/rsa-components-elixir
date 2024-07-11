@@ -3,6 +3,9 @@ defmodule RsaComponents.TopNavigation do
 
   import RsaComponents.CoreComponents
 
+  attr :title, :string
+  attr :current_user, :any
+
   slot :menu_item, doc: "Menu items to render in main menu", required: true do
     attr(:href, :string)
   end
@@ -10,13 +13,18 @@ defmodule RsaComponents.TopNavigation do
   def top_navigation(assigns) do
     ~H"""
     <header class="px-4 sm:px-6 lg:px-16">
-      <div class="flex items-center py-4">
-        <div class="flex-0 items-center gap-4">
+      <div class="flex flex-1 items-center py-4">
+        <div class="flex items-center">
           <.link navigate="/admin">
             <.logo class="h-10" />
           </.link>
+          <div class="flex items-center min-w-fit w-64 w-fit h-10 text-lg font-bold bg-brand-50">
+            <.link navigate="/admin" class="block">
+              <span class="p-3 text-brand-600"><%= @title %></span>
+            </.link>
+          </div>
         </div>
-        <nav class="flex w-full pl-10 py-2 gap-10 justify-end">
+        <nav class="flex flex-1 pl-10 py-2 gap-10 justify-end">
           <.link
             :for={item <- @menu_item}
             navigate={item[:path]}
@@ -30,22 +38,24 @@ defmodule RsaComponents.TopNavigation do
         </nav>
       </div>
     </header>
-    <.drawer />
+    <.drawer current_user={@current_user} />
     """
   end
+
+  attr :current_user, :any
 
   def drawer(assigns) do
     ~H"""
     <div
       id="drawer"
-      class="hidden w-[480px] flex-col py-5 px-16 z-40 absolute right-0 h-screen top-0 bg-white"
+      class="hidden w-[480px] flex-col px-16 z-40 absolute right-0 h-screen top-0 bg-white"
     >
-      <div class="flex justify-end h-14">
+      <div class="flex justify-end h-14 pt-10">
         <button class="" phx-click={hide_drawer("#drawer")}>
           <.icon name="hero-x-mark-solid" class="w-7 h-7" />
         </button>
       </div>
-      <div id="drawer-content" class="w-full">
+      <div id="drawer-content" class="w-full flex flex-1 flex-col justify-between">
         <nav class="flex flex-col">
           <.drawer_link href="https://auth.rsa-dev.com/admin/">
             Auth Admin
@@ -60,9 +70,24 @@ defmodule RsaComponents.TopNavigation do
             Marketing Admin
           </.drawer_link>
         </nav>
+        <%= if @current_user do %>
+          <div class="pb-10">
+            <div class="py-5 "><%= @current_user.email %></div>
+            <.link
+              href="/auth/log_out"
+              class="bg-neutral-25 flex items-center w-fit px-4 py-2 rounded text-brand-600 space-x-1"
+            >
+              <.logout_icon class="inline" /><span class="text-sm leading-none"> Log out</span>
+            </.link>
+          </div>
+        <% end %>
       </div>
     </div>
-    <div id="drawer-backdrop" class="hidden bg-black/50 dark:bg-black/80 fixed inset-0 z-30" />
+    <div
+      id="drawer-backdrop"
+      class="hidden bg-black/50 dark:bg-black/80 fixed inset-0 z-30"
+      phx-click={hide_drawer("#drawer")}
+    />
     """
   end
 
@@ -121,6 +146,21 @@ defmodule RsaComponents.TopNavigation do
         clip-rule="evenodd"
         d="M3.61719 5.9502H24.3839V8.0502H3.61719V5.9502ZM3.61719 12.9502H24.3839V15.0502H3.61719V12.9502ZM11.2005 19.9502H24.3839V22.0502H11.2005V19.9502Z"
         fill="#15161A"
+      />
+    </svg>
+    """
+  end
+
+  attr :class, :string
+
+  defp logout_icon(assigns) do
+    ~H"""
+    <svg class={@class} width="21" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M.943 1.576A3.027 3.027 0 0 1 3.074.7H7.68v1.8H3.074c-.325 0-.636.128-.863.354-.228.226-.354.53-.354.846v12.6c0 .316.126.62.354.846.227.226.538.354.863.354H7.68v1.8H3.074a3.027 3.027 0 0 1-2.13-.876A2.991 2.991 0 0 1 .056 16.3V3.7c0-.798.32-1.562.886-2.124Zm13.544 2.351L20.288 10l-5.8 6.072-1.302-1.243 3.753-3.929H6.143V9.1H16.94l-3.753-3.93 1.301-1.243Z"
+        fill="#1A2BAD"
       />
     </svg>
     """
