@@ -4,6 +4,8 @@ defmodule RsaComponents.Input do
   import RsaComponents.CoreComponents
   import LiveSelect
 
+  @gettext Application.compile_env!(:rsa_components, :gettext_module)
+
   @doc """
   Renders a label.
   """
@@ -13,7 +15,10 @@ defmodule RsaComponents.Input do
 
   def label(assigns) do
     ~H"""
-    <label for={@for} class={classes(["block text-sm font-semibold leading-6 text-zinc-800", @class])}>
+    <label
+      for={@for}
+      class={classes(["block text-sm font-semibold leading-6 text-neutral-950", @class])}
+    >
       <%= render_slot(@inner_block) %>
     </label>
     """
@@ -86,8 +91,8 @@ defmodule RsaComponents.Input do
       end)
 
     ~H"""
-    <div class="flex flex-col w-full" phx-feedback-for={@name}>
-      <label class="flex items-center gap-4 text-sm leading-6 text-zinc-600">
+    <div class="flex flex-col w-full h-full justify-center" phx-feedback-for={@name}>
+      <label class="flex items-center gap-2 text-sm leading-6 text-fg">
         <input type="hidden" name={@name} value="false" />
         <input
           type="checkbox"
@@ -95,7 +100,7 @@ defmodule RsaComponents.Input do
           name={@name}
           value="true"
           checked={@checked}
-          class="rounded-lg border-border-input text-zinc-900 focus:ring-0"
+          class="rounded h-6 w-6 border-border-input text-brand-500 focus:ring-1"
           {@rest}
         />
         <%= @label %>
@@ -132,7 +137,7 @@ defmodule RsaComponents.Input do
         id={@id}
         name={@name}
         class={[
-          "block w-full rounded-lg border-border-input text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+          "block w-full rounded-lg text-fg focus:ring-1 sm:text-sm sm:leading-6",
           "min-h-[6rem] phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
           @errors == [] && "border-border-input focus:border-border-input-pressed",
           @errors != [] && "border-rose-400 focus:border-rose-400"
@@ -150,7 +155,11 @@ defmodule RsaComponents.Input do
       <.label for={@id}><%= @label %></.label>
       <input id={@id} type="hidden" phx-hook="TrixEditor" name={@name} value={@value} />
       <div id="richtext" phx-update="ignore">
-        <trix-editor input={@id} class="trix-content public"></trix-editor>
+        <trix-editor
+          input={@id}
+          class="trix-content public border rounded-lg border-border-input focus:ring-1 focus:border-border-input-pressed "
+        >
+        </trix-editor>
       </div>
       <.error :for={msg <- @errors}><%= msg %></.error>
     </div>
@@ -173,7 +182,7 @@ defmodule RsaComponents.Input do
         id={@id}
         value={Phoenix.HTML.Form.normalize_value("text", @value)}
         class={[
-          "block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+          "block w-full rounded-lg text-fg focus:ring-1 sm:text-sm sm:leading-6",
           "phx-no-feedback:border-border-input phx-no-feedback:focus:border-border-input-pressed",
           @errors == [] && "border-border-input focus:border-border-input-pressed",
           @errors != [] && "border-rose-400 focus:border-rose-400"
@@ -216,7 +225,7 @@ defmodule RsaComponents.Input do
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
-          "block h-12 w-full border rounded-lg text-zinc-900 focus:ring-1 sm:text-sm sm:leading-6",
+          "block h-12 w-full border rounded-lg text-fg focus:ring-1 sm:text-sm sm:leading-6",
           "phx-no-feedback:border-border-input phx-no-feedback:focus:border-border-input-pressed",
           @errors == [] && "border-border-input focus:border-border-input-pressed",
           @errors != [] && "border-rose-400 focus:border-rose-400"
@@ -276,9 +285,9 @@ defmodule RsaComponents.Input do
     # with our gettext backend as first argument. Translations are
     # available in the errors.po file (as we use the "errors" domain).
     if count = opts[:count] do
-      Gettext.dngettext(LeadsWeb.Gettext, "errors", msg, msg, count, opts)
+      Gettext.dngettext(@gettext, "errors", msg, msg, count, opts)
     else
-      Gettext.dgettext(LeadsWeb.Gettext, "errors", msg, opts)
+      Gettext.dgettext(@gettext, "errors", msg, opts)
     end
   end
 
