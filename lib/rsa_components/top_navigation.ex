@@ -63,7 +63,7 @@ defmodule RsaComponents.TopNavigation do
           <.drawer_link href="https://infoweb.rsa-dev.com/admin">
             Infoweb Admin
           </.drawer_link>
-          <.drawer_link href="https://leads.rsa-dev.com/">
+          <.drawer_link href="https://leads.rsa-dev.com/admin">
             Leads Admin
           </.drawer_link>
           <.drawer_link href="https://marketing.rsa-dev.com/admin/">
