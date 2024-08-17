@@ -24,7 +24,7 @@ defmodule RsaComponents.MixProject do
       {:tails, "~> 0.1.5"},
       {:phoenix_live_view, "~> 0.20.1"},
       # {:live_select, "~> 1.4.0"},
-      {:live_select, path: "../../live_select"},
+      {:live_select, github: "ringvold/live_select", branch: "multi-select-tags-mode"},
       {:gettext, "~> 0.20"},
       {:mix_test_watch, "~> 1.2", only: [:dev, :test]},
       # {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
