@@ -68,6 +68,15 @@ defmodule RsaComponents.Input do
   attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
   attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
 
+  attr :input_class, :string,
+    default: nil,
+    doc: "additional classes to apply to the input element"
+
+  attr :input_size, :atom,
+    default: :xs,
+    doc: "size of input in design system",
+    values: ~w(xs sm md lg)a
+
   attr :rest, :global,
     include: ~w(accept autocomplete capture cols disabled form list max maxlength min minlength
          multiple pattern placeholder readonly required rows size step phx-key phx-keyup phx-keydown
@@ -117,7 +126,13 @@ defmodule RsaComponents.Input do
       <select
         id={@id}
         name={@name}
-        class="block h-12 w-full rounded-lg border border-border-input bg-white shadow-sm focus:border-border-input-pressed focus:ring-1 sm:text-sm"
+        class={
+          classes([
+            "block h-12 w-full rounded-lg border border-border-input bg-white shadow-sm focus:border-border-input-pressed focus:ring-1 sm:text-sm",
+            assigns[:input_size] && input_size_classes(@input_size),
+            @input_class
+          ])
+        }
         multiple={@multiple}
         {@rest}
       >
@@ -202,13 +217,22 @@ defmodule RsaComponents.Input do
     ~H"""
     <div class="flex flex-col w-full" phx-feedback-for={@name}>
       <.label class="mb-2" for={@id}><%= @label %></.label>
-      <.live_select
-        field={@field}
-        placeholder={@label}
-        debounce={120}
-        {@rest}
-        {live_select_classes()}
-      />
+      <.live_select field={@field} placeholder={@label} debounce={120} {@rest} {live_select_classes()}>
+        <:option :let={{%{label: label, value: value}, selected}}>
+          <%= if multiple_select?(@rest) do %>
+            <div class="flex justify-content items-center">
+              <input
+                class="rounded w-4 h-4 mr-3 border border-border"
+                type="checkbox"
+                checked={selected}
+              />
+              <span class="text-sm"><%= label %></span>
+            </div>
+          <% else %>
+            <%= label %>
+          <% end %>
+        </:option>
+      </.live_select>
       <.error :for={msg <- @errors}><%= msg %></.error>
     </div>
     """
@@ -224,12 +248,16 @@ defmodule RsaComponents.Input do
         name={@name}
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
-        class={[
-          "block h-12 w-full border rounded-lg text-fg focus:ring-1 sm:text-sm sm:leading-6",
-          "phx-no-feedback:border-border-input phx-no-feedback:focus:border-border-input-pressed",
-          @errors == [] && "border-border-input focus:border-border-input-pressed",
-          @errors != [] && "border-rose-400 focus:border-rose-400"
-        ]}
+        class={
+          classes([
+            "block h-12 w-full border rounded-lg text-fg focus:ring-1",
+            "phx-no-feedback:border-border-input phx-no-feedback:focus:border-border-input-pressed",
+            @errors == [] && "border-border-input focus:border-border-input-pressed",
+            @errors != [] && "border-rose-400 focus:border-rose-400",
+            assigns[:input_size] && input_size_classes(@input_size),
+            @input_class
+          ])
+        }
         {@rest}
       />
       <.error :for={msg <- @errors}><%= msg %></.error>
@@ -237,16 +265,37 @@ defmodule RsaComponents.Input do
     """
   end
 
+  defp input_size_classes(size) do
+    case size do
+      :xs ->
+        "h-12 sm:text-xs"
+
+      :sm ->
+        "h-14 sm:text-sm"
+
+      :md ->
+        "h-16 sm:text-base"
+
+      :lg ->
+        "h-20 sm:text-lg"
+    end
+  end
+
+  def multiple_select?(assigns) do
+    assigns.mode == :tags && is_map_key(assigns, :tags_mode) &&
+      assigns.tags_mode == :multiple_select
+  end
+
   def live_select_classes() do
     %{
-      active_option_class: ~W(text-white bg-gray-600),
+      active_option_class: ~W(text-black bg-bg),
       available_option_class: ~W(cursor-pointer hover:bg-bg rounded),
       clear_button_class: ~W(cursor-pointer),
       # clear_tag_button_class: ~W(cursor-pointer),
       container_class: ~W(h-full text-black relative),
       dropdown_class: ~W(absolute p-3 rounded-md shadow z-50 bg-white inset-x-0 top-full),
       option_class: ~W(rounded px-4 py-3),
-      selected_option_class: ~W(text-gray-400),
+      selected_option_class: ~W(text-fg cursor-pointer hover:bg-bg rounded),
       text_input_class:
         ~W(rounded-md text-fg h-12 w-full border border-border-input  disabled:bg-gray-100 disabled:placeholder:text-gray-400 disabled:text-gray-400 pr-6),
       text_input_selected_class: ~W(border-border-input text-gray-600),

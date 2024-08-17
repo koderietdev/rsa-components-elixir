@@ -36,6 +36,7 @@ defmodule RsaComponents.Card do
   Renders a card with title and number
   """
   attr :title, :string, required: true
+  attr :subtitle, :string, required: false
   attr :fixed_height, :boolean, default: true
   attr :class, :string, default: nil
   attr :number, :string, required: true
@@ -49,9 +50,13 @@ defmodule RsaComponents.Card do
         @class
       ])
     }>
-      <span class="text-xl font-bold"><%= @title %></span>
+      <div :if={assigns[:subtitle]} class="">
+        <div class="text-[21px] font-bold mb-1"><%= @title %></div>
+        <div class="text-sm text-fg-weak"><%= @subtitle %></div>
+      </div>
+      <span :if={is_nil(assigns[:subtitle])} class="text-[21px] font-bold mb-1"><%= @title %></span>
       <div class={[
-        "text-5xl font-semibold",
+        "text-[64px] leading-[64px] font-semibold",
         @number == 0 && "text-neutral-100",
         @number > 0 && "text-brand-500"
       ]}>
@@ -85,13 +90,15 @@ defmodule RsaComponents.Card do
     ~H"""
     <div class={
       classes([
-        "flex flex-1 flex-col bg-white shadow-sm rounded-xl p-8",
+        "flex flex-1 flex-col h-fit bg-white shadow-sm rounded-xl p-8",
         length(@header) > 0 && "p-0",
         @class
       ])
     }>
       <%= for header <- @header do %>
-        <div class={classes(["px-10 py-8 font-bold border-b border-b-neutral-50", header[:class]])}>
+        <div class={
+          classes(["px-10 py-8 text-lg font-bold border-b border-b-neutral-50", header[:class]])
+        }>
           <%= render_slot(@header) %>
         </div>
       <% end %>

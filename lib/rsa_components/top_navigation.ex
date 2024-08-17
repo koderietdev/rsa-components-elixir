@@ -12,15 +12,15 @@ defmodule RsaComponents.TopNavigation do
 
   def top_navigation(assigns) do
     ~H"""
-    <header class="px-4 sm:px-6 lg:px-16">
-      <div class="flex flex-1 items-center py-4">
+    <header class="h-24 px-4 flex items-center sm:px-6 lg:px-16">
+      <div class="flex flex-1 items-center gap-10">
         <div class="flex items-center">
           <.link navigate="/admin">
-            <.logo class="h-10" />
+            <.logo class="h-9" />
           </.link>
-          <div class="flex items-center min-w-fit w-64 w-fit h-10 text-lg font-bold bg-brand-50">
+          <div class="flex items-center min-w-fit w-fit h-9 text-lg font-bold bg-brand-50">
             <.link navigate="/admin" class="block">
-              <span class="p-3 text-brand-600"><%= @title %></span>
+              <span class="px-3 flex text-sm text-brand-600"><%= @title %></span>
             </.link>
           </div>
         </div>
@@ -28,7 +28,7 @@ defmodule RsaComponents.TopNavigation do
           <.link
             :for={item <- @menu_item}
             navigate={item[:path]}
-            class="font-medium leading-6 hover:text-zinc-700 hover:underline"
+            class="font-medium leading-8 text-sm hover:text-zinc-700 hover:underline"
           >
             <%= render_slot(item) %>
           </.link>
