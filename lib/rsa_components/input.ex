@@ -72,7 +72,7 @@ defmodule RsaComponents.Input do
     default: nil,
     doc: "additional classes to apply to the input element"
 
-  attr :input_size, :atom,
+  attr :size, :atom,
     default: :xs,
     doc: "size of input in design system",
     values: ~w(xs sm md lg)a
@@ -129,7 +129,7 @@ defmodule RsaComponents.Input do
         class={
           classes([
             "block h-12 w-full rounded-lg border border-border-input bg-white shadow-sm focus:border-border-input-pressed focus:ring-1 sm:text-sm",
-            assigns[:input_size] && input_size_classes(@input_size),
+            assigns[:size] && input_size_classes(@size),
             @input_class
           ])
         }
@@ -254,7 +254,7 @@ defmodule RsaComponents.Input do
             "phx-no-feedback:border-border-input phx-no-feedback:focus:border-border-input-pressed",
             @errors == [] && "border-border-input focus:border-border-input-pressed",
             @errors != [] && "border-rose-400 focus:border-rose-400",
-            assigns[:input_size] && input_size_classes(@input_size),
+            assigns[:size] && input_size_classes(@size),
             @input_class
           ])
         }
@@ -268,13 +268,13 @@ defmodule RsaComponents.Input do
   defp input_size_classes(size) do
     case size do
       :xs ->
-        "h-12 sm:text-xs"
+        "h-12 sm:text-sm"
 
       :sm ->
-        "h-14 sm:text-sm"
+        "h-14 sm:text-base"
 
       :md ->
-        "h-16 sm:text-base"
+        "h-16 sm:text-md"
 
       :lg ->
         "h-20 sm:text-lg"
