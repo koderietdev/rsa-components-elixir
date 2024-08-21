@@ -48,7 +48,7 @@ defmodule RsaComponents.Table do
           </.table_row>
         </.table_header>
 
-        <.table_body>
+        <.table_body id={@id} rows={@rows}>
           <.table_row :for={row <- @rows} id={@row_id && @row_id.(row)}>
             <.table_cell
               :for={{col, i} <- Enum.with_index(@col)}
@@ -135,13 +135,20 @@ defmodule RsaComponents.Table do
     """
   end
 
+  attr(:id, :string, required: true)
+  attr(:rows, :string, required: true)
   attr(:class, :string, default: nil)
   attr(:rest, :global)
   slot(:inner_block, required: true)
 
   def table_body(assigns) do
     ~H"""
-    <tbody class={classes(["[&_tr:last-child]:border-0", @class])} {@rest}>
+    <tbody
+      id={@id}
+      phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
+      class={classes(["[&_tr:last-child]:border-0", @class])}
+      {@rest}
+    >
       <%= render_slot(@inner_block) %>
     </tbody>
     """
