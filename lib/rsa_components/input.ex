@@ -80,7 +80,7 @@ defmodule RsaComponents.Input do
   attr :rest, :global,
     include: ~w(accept autocomplete capture cols disabled form list max maxlength min minlength
          multiple pattern placeholder readonly required rows size step phx-key phx-keyup phx-keydown
-         debounce mode)
+         debounce mode timezone)
 
   slot :inner_block
 
@@ -233,6 +233,44 @@ defmodule RsaComponents.Input do
           <% end %>
         </:option>
       </.live_select>
+      <.error :for={msg <- @errors}><%= msg %></.error>
+    </div>
+    """
+  end
+
+  def normalize_value_with_zone("datetime-local-zone", %struct{} = value, zone \\ "Europe/Oslo")
+      when struct in [NaiveDateTime, DateTime] do
+    <<date::10-binary, ?\s, hour_minute::5-binary, _rest::binary>> =
+      to_string(DateTime.shift_zone!(value, zone))
+
+    {:safe, [date, ?T, hour_minute]}
+  end
+
+  def normalize_value_with_zone(_type, value, zone) do
+    value
+  end
+
+  def input(%{type: "datetime-local-zone"} = assigns) do
+    ~H"""
+    <div class="flex flex-col w-full" phx-feedback-for={@name}>
+      <.label class="mb-2" for={@id}><%= @label %></.label>
+      <input
+        type="datetime-local"
+        name={@name}
+        value={normalize_value_with_zone("datetime-local-zone", @value, @rest.timezone)}
+        id={@id}
+        class={
+          classes([
+            "block h-12 w-full border rounded-lg text-fg focus:ring-1",
+            "phx-no-feedback:border-border-input phx-no-feedback:focus:border-border-input-pressed",
+            @errors == [] && "border-border-input focus:border-border-input-pressed",
+            @errors != [] && "border-rose-400 focus:border-rose-400",
+            assigns[:size] && input_size_classes(@size),
+            @input_class
+          ])
+        }
+        {@rest}
+      />
       <.error :for={msg <- @errors}><%= msg %></.error>
     </div>
     """
