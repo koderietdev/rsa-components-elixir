@@ -147,7 +147,7 @@ defmodule RsaComponents.Input do
   def input(%{type: "textarea"} = assigns) do
     ~H"""
     <div class="flex flex-col w-full" phx-feedback-for={@name}>
-      <.label class="mb-2" for={@id}><%= @label %></.label>
+      <.label :if={@label && @label != ""} class="mb-2" for={@id}><%= @label %></.label>
       <textarea
         id={@id}
         name={@name}
@@ -167,7 +167,7 @@ defmodule RsaComponents.Input do
   def input(%{type: "trix"} = assigns) do
     ~H"""
     <div class="flex flex-col w-full" phx-feedback-for={@name}>
-      <.label for={@id}><%= @label %></.label>
+      <.label :if={@label && @label != ""} for={@id}><%= @label %></.label>
       <input id={@id} type="hidden" phx-hook="TrixEditor" name={@name} value={@value} />
       <div id="richtext" phx-update="ignore">
         <trix-editor
@@ -190,7 +190,7 @@ defmodule RsaComponents.Input do
 
     ~H"""
     <div class="flex flex-col w-full" phx-feedback-for={@name}>
-      <.label class="mb-2" for={@id}><%= @label %></.label>
+      <.label :if={@label && @label != ""} class="mb-2" for={@id}><%= @label %></.label>
       <input
         type="text"
         name={@name}
@@ -216,10 +216,16 @@ defmodule RsaComponents.Input do
 
     ~H"""
     <div class="flex flex-col w-full" phx-feedback-for={@name}>
-      <.label class="mb-2" for={@id}><%= @label %></.label>
-      <.live_select field={@field} placeholder={@label} debounce={120} {@rest} {live_select_classes()}>
+      <.label :if={@label && @label != ""} class="mb-2" for={@id}><%= @label %></.label>
+      <.live_select
+        field={@field}
+        placeholder={@label}
+        debounce={120}
+        {@rest}
+        {live_select_classes(quick_select: quick_select?(@rest))}
+      >
         <:option :let={{%{label: label, value: value}, selected}}>
-          <%= if multiple_select?(@rest) do %>
+          <%= if quick_select?(@rest) do %>
             <div class="flex justify-content items-center">
               <input
                 class="rounded w-4 h-4 mr-3 border border-border"
@@ -253,7 +259,7 @@ defmodule RsaComponents.Input do
   def input(%{type: "datetime-local-zone"} = assigns) do
     ~H"""
     <div class="flex flex-col w-full" phx-feedback-for={@name}>
-      <.label class="mb-2" for={@id}><%= @label %></.label>
+      <.label :if={@label && @label != ""} class="mb-2" for={@id}><%= @label %></.label>
       <input
         type="datetime-local"
         name={@name}
@@ -280,7 +286,9 @@ defmodule RsaComponents.Input do
   def input(assigns) do
     ~H"""
     <div class="flex flex-col w-full" phx-feedback-for={@name}>
-      <.label class="mb-2" for={@id}><%= @label %></.label>
+      <.label :if={@label && @label != ""} class="mb-2" for={@id}>
+        <%= @label %>
+      </.label>
       <input
         type={@type}
         name={@name}
@@ -319,21 +327,26 @@ defmodule RsaComponents.Input do
     end
   end
 
-  def multiple_select?(assigns) do
+  def quick_select?(assigns) do
     assigns.mode == :tags && is_map_key(assigns, :tags_mode) &&
       assigns.tags_mode == :multiple_select
   end
 
-  def live_select_classes() do
+  def live_select_classes(opts \\ []) do
     %{
       active_option_class: ~W(text-black bg-bg),
       available_option_class: ~W(cursor-pointer hover:bg-bg rounded),
       clear_button_class: ~W(cursor-pointer),
-      # clear_tag_button_class: ~W(cursor-pointer),
+      clear_tag_button_class: ~W(cursor-pointer),
       container_class: ~W(h-full text-black relative),
       dropdown_class: ~W(absolute p-3 rounded-md shadow z-50 bg-white inset-x-0 top-full),
-      option_class: ~W(rounded px-4 py-3),
-      selected_option_class: ~W(text-fg cursor-pointer hover:bg-bg rounded),
+      option_class: ~W(rounded px-4 py-3 my-1),
+      selected_option_class:
+        if opts[:quickselect] do
+          ~W(text-neutral-200 cursor-pointer hover:bg-bg rounded)
+        else
+          ~W(text-neutral-500 bg-neutral-50 rounded)
+        end,
       text_input_class:
         ~W(rounded-md text-fg h-12 w-full border border-border-input  disabled:bg-gray-100 disabled:placeholder:text-gray-400 disabled:text-gray-400 pr-6),
       text_input_selected_class: ~W(border-border-input text-gray-600),
