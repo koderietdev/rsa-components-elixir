@@ -122,7 +122,7 @@ defmodule RsaComponents.Input do
   def input(%{type: "select"} = assigns) do
     ~H"""
     <div class="flex flex-col w-full" phx-feedback-for={@name}>
-      <.label class="mb-2" for={@id}><%= @label %></.label>
+      <.label :if={@label && @label != ""} class="mb-2" for={@id}><%= @label %></.label>
       <select
         id={@id}
         name={@name}
@@ -172,7 +172,7 @@ defmodule RsaComponents.Input do
       <div id="richtext" phx-update="ignore">
         <trix-editor
           input={@id}
-          class="trix-content public min-h-[400px] border rounded-lg border-border-input focus:ring-1 focus:border-border-input-pressed "
+          class="trix-content public min-h-[400px] border rounded-lg border-border-input focus:ring-1 focus:border-border-input-pressed"
         >
         </trix-editor>
       </div>
@@ -219,7 +219,6 @@ defmodule RsaComponents.Input do
       <.label :if={@label && @label != ""} class="mb-2" for={@id}><%= @label %></.label>
       <.live_select
         field={@field}
-        placeholder={@label}
         debounce={120}
         {@rest}
         {live_select_classes(quick_select: quick_select?(@rest))}
@@ -342,10 +341,10 @@ defmodule RsaComponents.Input do
       dropdown_class: ~W(absolute p-3 rounded-md shadow z-50 bg-white inset-x-0 top-full),
       option_class: ~W(rounded px-4 py-3 my-1),
       selected_option_class:
-        if opts[:quickselect] do
+        if opts[:quick_select] do
           ~W(text-neutral-200 cursor-pointer hover:bg-bg rounded)
         else
-          ~W(text-neutral-500 bg-neutral-50 rounded)
+          ~W(text-neutral-200 rounded)
         end,
       text_input_class:
         ~W(rounded-md text-fg h-12 w-full border border-border-input  disabled:bg-gray-100 disabled:placeholder:text-gray-400 disabled:text-gray-400 pr-6),
