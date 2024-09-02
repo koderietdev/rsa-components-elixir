@@ -100,7 +100,7 @@ defmodule RsaComponents.Input do
       end)
 
     ~H"""
-    <div class="flex flex-col w-full h-full justify-center" phx-feedback-for={@name}>
+    <div class="flex flex-col w-full justify-center" phx-feedback-for={@name}>
       <label class="flex items-center gap-2 text-sm leading-6 text-fg">
         <input type="hidden" name={@name} value="false" />
         <input
@@ -172,7 +172,7 @@ defmodule RsaComponents.Input do
       <div id="richtext" phx-update="ignore">
         <trix-editor
           input={@id}
-          class="trix-content public border rounded-lg border-border-input focus:ring-1 focus:border-border-input-pressed "
+          class="trix-content public h-[400px] border rounded-lg border-border-input focus:ring-1 focus:border-border-input-pressed "
         >
         </trix-editor>
       </div>
