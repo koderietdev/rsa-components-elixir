@@ -172,7 +172,7 @@ defmodule RsaComponents.Input do
       <div id="richtext" phx-update="ignore">
         <trix-editor
           input={@id}
-          class="trix-content public h-[400px] border rounded-lg border-border-input focus:ring-1 focus:border-border-input-pressed "
+          class="trix-content public min-h-[400px] border rounded-lg border-border-input focus:ring-1 focus:border-border-input-pressed "
         >
         </trix-editor>
       </div>
