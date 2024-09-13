@@ -21,11 +21,13 @@ defmodule RsaComponents.CoreComponents do
     ~H"""
     <button
       type={@type}
-      class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-brand-600 hover:bg-brand-500 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
-        @class
-      ]}
+      class={
+        classes([
+          "phx-submit-loading:opacity-75 rounded-lg bg-brand-600 hover:bg-brand-500 py-2 px-3",
+          "text-sm font-semibold leading-6 text-white active:text-white/80",
+          @class
+        ])
+      }
       {@rest}
     >
       <%= render_slot(@inner_block) %>
