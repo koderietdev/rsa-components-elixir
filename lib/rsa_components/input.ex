@@ -67,6 +67,7 @@ defmodule RsaComponents.Input do
   attr :prompt, :string, default: nil, doc: "the prompt for select inputs"
   attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
   attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
+  attr :legend, :string, default: "", doc: "the ledgend for a fieldset"
 
   attr :input_class, :string,
     default: nil,
@@ -223,7 +224,7 @@ defmodule RsaComponents.Input do
         {@rest}
         {live_select_classes(quick_select: quick_select?(@rest))}
       >
-        <:option :let={{%{label: label, value: value}, selected}}>
+        <:option :let={%{label: label, value: value, selected: selected}}>
           <%= if quick_select?(@rest) do %>
             <div class="flex justify-content items-center">
               <input
@@ -327,8 +328,7 @@ defmodule RsaComponents.Input do
   end
 
   def quick_select?(assigns) do
-    assigns.mode == :tags && is_map_key(assigns, :tags_mode) &&
-      assigns.tags_mode == :multiple_select
+    assigns.mode == :quick_tags
   end
 
   def live_select_classes(opts \\ []) do
