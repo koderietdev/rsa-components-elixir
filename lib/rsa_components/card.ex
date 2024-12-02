@@ -81,7 +81,8 @@ defmodule RsaComponents.Card do
   end
 
   slot :item, doc: "List items to render in the card" do
-    attr(:title, :string)
+    attr :title, :string
+    attr :class, :string
   end
 
   slot :empty_list, doc: "Slot to render when the list is empty"
