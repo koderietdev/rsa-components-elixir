@@ -22,7 +22,7 @@ defmodule RsaComponents.MixProject do
   defp deps do
     [
       {:tails, "~> 0.1.5"},
-      {:phoenix_live_view, "~> 0.20.17"},
+      {:phoenix_live_view, "~> 1.0"},
       # {:live_select, "~> 1.4.0"},
       {:live_select, github: "ringvold/live_select", branch: "quick-tags-lv-1.0"},
       # {:live_select, path: "../../live_select"},
