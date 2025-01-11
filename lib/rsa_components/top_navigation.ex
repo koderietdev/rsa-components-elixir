@@ -6,6 +6,7 @@ defmodule RsaComponents.TopNavigation do
   attr :title, :string
   attr :current_user, :any
   attr :hide_drawer, :boolean, default: false
+  attr :logo_link, :string, default: "/admin"
 
   slot :menu_item, doc: "Menu items to render in main menu", required: false do
     attr :href, :string
@@ -16,7 +17,7 @@ defmodule RsaComponents.TopNavigation do
     <header class="h-24 px-4 flex items-center sm:px-6 lg:px-16">
       <div class="flex flex-1 items-center gap-10">
         <div class="flex items-center">
-          <.link navigate="/admin">
+          <.link navigate={@logo_link}>
             <.logo class="h-9" />
           </.link>
           <div class="flex items-center min-w-fit w-fit h-9 text-lg font-bold bg-brand-50">
