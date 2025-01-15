@@ -21,7 +21,7 @@ defmodule RsaComponents.TopNavigation do
             <.logo class="h-9" />
           </.link>
           <div class="flex items-center min-w-fit w-fit h-9 text-lg font-bold bg-brand-50">
-            <.link navigate="/admin" class="block">
+            <.link navigate={@logo_link} class="block">
               <span class="px-3 flex text-sm text-brand-600">{@title}</span>
             </.link>
           </div>
