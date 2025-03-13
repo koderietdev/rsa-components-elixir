@@ -19,7 +19,7 @@ defmodule RsaComponents.Input do
       for={@for}
       class={classes(["block text-sm font-semibold leading-6 text-neutral-950", @class])}
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </label>
     """
   end
@@ -113,9 +113,9 @@ defmodule RsaComponents.Input do
           class="rounded h-6 w-6 border-border-input text-brand-500 focus:ring-1"
           {@rest}
         />
-        <%= @label %>
+        {@label}
       </label>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end
@@ -123,7 +123,7 @@ defmodule RsaComponents.Input do
   def input(%{type: "select"} = assigns) do
     ~H"""
     <div class="flex flex-col w-full" phx-feedback-for={@name}>
-      <.label :if={@label && @label != ""} class="mb-2" for={@id}><%= @label %></.label>
+      <.label :if={@label && @label != ""} class="mb-2" for={@id}>{@label}</.label>
       <select
         id={@id}
         name={@name}
@@ -137,10 +137,10 @@ defmodule RsaComponents.Input do
         multiple={@multiple}
         {@rest}
       >
-        <option :if={@prompt} value=""><%= @prompt %></option>
-        <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
+        <option :if={@prompt} value="">{@prompt}</option>
+        {Phoenix.HTML.Form.options_for_select(@options, @value)}
       </select>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end
@@ -148,7 +148,7 @@ defmodule RsaComponents.Input do
   def input(%{type: "textarea"} = assigns) do
     ~H"""
     <div class="flex flex-col w-full" phx-feedback-for={@name}>
-      <.label :if={@label && @label != ""} class="mb-2" for={@id}><%= @label %></.label>
+      <.label :if={@label && @label != ""} class="mb-2" for={@id}>{@label}</.label>
       <textarea
         id={@id}
         name={@name}
@@ -160,7 +160,7 @@ defmodule RsaComponents.Input do
         ]}
         {@rest}
       ><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end
@@ -168,7 +168,7 @@ defmodule RsaComponents.Input do
   def input(%{type: "trix"} = assigns) do
     ~H"""
     <div class="flex flex-col w-full" phx-feedback-for={@name}>
-      <.label :if={@label && @label != ""} for={@id}><%= @label %></.label>
+      <.label :if={@label && @label != ""} for={@id}>{@label}</.label>
       <input id={@id} type="hidden" phx-hook="TrixEditor" name={@name} value={@value} />
       <div id="richtext" phx-update="ignore">
         <trix-editor
@@ -177,7 +177,7 @@ defmodule RsaComponents.Input do
         >
         </trix-editor>
       </div>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end
@@ -191,7 +191,7 @@ defmodule RsaComponents.Input do
 
     ~H"""
     <div class="flex flex-col w-full" phx-feedback-for={@name}>
-      <.label :if={@label && @label != ""} class="mb-2" for={@id}><%= @label %></.label>
+      <.label :if={@label && @label != ""} class="mb-2" for={@id}>{@label}</.label>
       <input
         type="text"
         name={@name}
@@ -205,7 +205,7 @@ defmodule RsaComponents.Input do
         ]}
         {@rest}
       />
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end
@@ -217,7 +217,7 @@ defmodule RsaComponents.Input do
 
     ~H"""
     <div class="flex flex-col w-full" phx-feedback-for={@name}>
-      <.label :if={@label && @label != ""} class="mb-2" for={@id}><%= @label %></.label>
+      <.label :if={@label && @label != ""} class="mb-2" for={@id}>{@label}</.label>
       <.live_select
         field={@field}
         debounce={120}
@@ -232,14 +232,14 @@ defmodule RsaComponents.Input do
                 type="checkbox"
                 checked={selected}
               />
-              <span class="text-sm"><%= label %></span>
+              <span class="text-sm">{label}</span>
             </div>
           <% else %>
-            <%= label %>
+            {label}
           <% end %>
         </:option>
       </.live_select>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end
@@ -259,7 +259,7 @@ defmodule RsaComponents.Input do
   def input(%{type: "datetime-local-zone"} = assigns) do
     ~H"""
     <div class="flex flex-col w-full" phx-feedback-for={@name}>
-      <.label :if={@label && @label != ""} class="mb-2" for={@id}><%= @label %></.label>
+      <.label :if={@label && @label != ""} class="mb-2" for={@id}>{@label}</.label>
       <input
         type="datetime-local"
         name={@name}
@@ -277,7 +277,7 @@ defmodule RsaComponents.Input do
         }
         {@rest}
       />
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end
@@ -287,7 +287,7 @@ defmodule RsaComponents.Input do
     ~H"""
     <div class="flex flex-col w-full" phx-feedback-for={@name}>
       <.label :if={@label && @label != ""} class="mb-2" for={@id}>
-        <%= @label %>
+        {@label}
       </.label>
       <input
         type={@type}
@@ -306,7 +306,7 @@ defmodule RsaComponents.Input do
         }
         {@rest}
       />
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end
@@ -348,7 +348,7 @@ defmodule RsaComponents.Input do
         end,
       text_input_class:
         ~W(rounded-md text-fg h-12 w-full border border-border-input  disabled:bg-gray-100 disabled:placeholder:text-gray-400 disabled:text-gray-400 pr-6),
-      text_input_selected_class: ~W(border-border-input text-gray-600),
+      text_input_selected_class: ~W(border-border-input text-neutral-900),
       tags_container_class: "hidden has-[:not(.hidden)]:flex flex-wrap gap-1 mb-3",
       tag_class:
         ~W(px-2.5 py-2 text-sm rounded-lg bg-bg-brand-subtle border border-border-brand flex)
@@ -364,7 +364,7 @@ defmodule RsaComponents.Input do
     ~H"""
     <p class="mt-3 flex gap-3 text-sm leading-6 text-rose-600 phx-no-feedback:hidden">
       <.icon name="hero-exclamation-circle-mini" class="mt-0.5 h-5 w-5 flex-none" />
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </p>
     """
   end

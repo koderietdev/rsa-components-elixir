@@ -5,9 +5,11 @@ defmodule RsaComponents.TopNavigation do
 
   attr :title, :string
   attr :current_user, :any
+  attr :hide_drawer, :boolean, default: false
+  attr :logo_link, :string, default: "/admin"
 
-  slot :menu_item, doc: "Menu items to render in main menu", required: true do
-    attr(:href, :string)
+  slot :menu_item, doc: "Menu items to render in main menu", required: false do
+    attr :href, :string
   end
 
   def top_navigation(assigns) do
@@ -15,30 +17,35 @@ defmodule RsaComponents.TopNavigation do
     <header class="h-24 px-4 flex items-center sm:px-6 lg:px-16">
       <div class="flex flex-1 items-center gap-10">
         <div class="flex items-center">
-          <.link navigate="/admin">
+          <.link navigate={@logo_link}>
             <.logo class="h-9" />
           </.link>
           <div class="flex items-center min-w-fit w-fit h-9 text-lg font-bold bg-brand-50">
-            <.link navigate="/admin" class="block">
-              <span class="px-3 flex text-sm text-brand-600"><%= @title %></span>
+            <.link navigate={@logo_link} class="block">
+              <span class="px-3 flex text-sm text-brand-600">{@title}</span>
             </.link>
           </div>
         </div>
         <nav class="flex flex-1 pl-10 py-2 gap-10 justify-end">
           <.link
             :for={item <- @menu_item}
+            :if={length(@menu_item) > 0}
             navigate={item[:path]}
             class="font-medium leading-8 text-sm hover:text-zinc-700 hover:underline"
           >
-            <%= render_slot(item) %>
+            {render_slot(item)}
           </.link>
-          <div class="cursor-pointer" phx-click={show_drawer("#drawer", "flex")}>
+          <div
+            :if={not @hide_drawer}
+            class="cursor-pointer"
+            phx-click={show_drawer("#drawer", "flex")}
+          >
             <.menu_icon />
           </div>
         </nav>
       </div>
     </header>
-    <.drawer current_user={@current_user} />
+    <.drawer :if={not @hide_drawer} current_user={@current_user} />
     """
   end
 
@@ -72,7 +79,7 @@ defmodule RsaComponents.TopNavigation do
         </nav>
         <%= if @current_user do %>
           <div class="pb-10">
-            <div class="py-5 "><%= @current_user.email %></div>
+            <div class="py-5 ">{@current_user.email}</div>
             <.link
               href="/auth/log_out"
               class="bg-neutral-25 flex items-center w-fit px-4 py-2 rounded text-brand-600 space-x-1"
@@ -101,7 +108,7 @@ defmodule RsaComponents.TopNavigation do
       class="py-5 text-lg font-medium leading-6 border-b border-[#EEEEF3] hover:text-zinc-700 hover:underline"
       target="_blank"
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </.link>
     """
   end
