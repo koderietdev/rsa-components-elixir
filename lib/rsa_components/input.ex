@@ -349,7 +349,7 @@ defmodule RsaComponents.Input do
       text_input_class:
         ~W(rounded-md text-fg h-12 w-full border border-border-input  disabled:bg-gray-100 disabled:placeholder:text-gray-400 disabled:text-gray-400 pr-6),
       text_input_selected_class: ~W(border-border-input text-gray-600),
-      tags_container_class: ~W(flex flex-wrap gap-1 mb-3),
+      tags_container_class: "hidden has-[:not(.hidden)]:flex flex-wrap gap-1 mb-3",
       tag_class:
         ~W(px-2.5 py-2 text-sm rounded-lg bg-bg-brand-subtle border border-border-brand flex)
     }
