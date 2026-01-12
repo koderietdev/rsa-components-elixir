@@ -22,15 +22,15 @@ defmodule RsaComponents.MixProject do
   defp deps do
     [
       {:tails, "~> 0.1.5"},
-      {:phoenix_live_view, "~> 0.19 or ~> 1.0"},
+      {:phoenix_live_view, "~> 1.1"},
       # {:live_select, "~> 1.4.0"},
-      {:live_select, "~> 1.5"},
+      {:live_select, "~> 1.7"},
       # {:live_select, path: "../../live_select"},
-      {:gettext, "~> 0.20"},
-      {:mix_test_watch, "~> 1.2", only: [:dev, :test]},
+      {:gettext, "~> 0.20 or ~> 1.0"},
+      {:mix_test_watch, "~> 1.4", only: [:dev, :test]},
       # {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       # {:styler, "~> 0.7", only: [:dev, :test], runtime: false},
-      {:ex_doc, "~> 0.34.1", only: [:dev, :test], runtime: false},
+      {:ex_doc, "~> 0.39.3", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.10", only: [:dev, :test], runtime: false},
       {:tailwind, "~> 0.2", only: [:dev, :test], runtime: Mix.env() == :dev}
     ]
