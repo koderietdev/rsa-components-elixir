@@ -67,6 +67,9 @@ defmodule RsaComponents.TopNavigation do
           <.drawer_link href="https://auth.rsa-dev.com/admin/">
             Auth Admin
           </.drawer_link>
+          <.drawer_link href="https://claims.rsa-dev.com/admin/">
+            Claims Admin
+          </.drawer_link>
           <.drawer_link href="https://infoweb.rsa-dev.com/admin">
             Infoweb Admin
           </.drawer_link>
@@ -76,11 +79,11 @@ defmodule RsaComponents.TopNavigation do
           <.drawer_link href="https://marketing.rsa-dev.com/admin/">
             Marketing Admin
           </.drawer_link>
-          <.drawer_link href="https://claims.rsa-dev.com/admin/">
-            Claims Admin
-          </.drawer_link>
           <.drawer_link href="https://reports.rsa-dev.com/admin/">
             Reports Admin
+          </.drawer_link>
+          <.drawer_link href="https://sales.rsa-dev.com/admin/">
+            Sales Admin
           </.drawer_link>
         </nav>
         <%= if @current_user do %>
