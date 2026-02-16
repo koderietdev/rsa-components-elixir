@@ -5,16 +5,18 @@ defmodule RsaComponents.TopNavigation do
 
   attr :title, :string
   attr :current_user, :any
+  attr :class, :any, default: nil
   attr :hide_drawer, :boolean, default: false
   attr :logo_link, :string, default: "/admin"
 
   slot :menu_item, doc: "Menu items to render in main menu", required: false do
     attr :href, :string
+    attr :path, :string
   end
 
   def top_navigation(assigns) do
     ~H"""
-    <header class="h-24 px-4 flex items-center sm:px-6 lg:px-16">
+    <header class={["h-24 px-4 flex items-center sm:px-6 lg:px-16", @class]}>
       <div class="flex flex-1 items-center gap-10">
         <div class="flex items-center">
           <.link navigate={@logo_link}>
