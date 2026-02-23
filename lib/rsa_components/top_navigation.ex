@@ -67,13 +67,13 @@ defmodule RsaComponents.TopNavigation do
       <div id="drawer-content" class="w-full flex flex-1 flex-col justify-between">
         <nav class="flex flex-col">
           <.drawer_link href="https://auth.rsa-dev.com/admin/">
-            Auth Admin
+            Users Admin
           </.drawer_link>
           <.drawer_link href="https://claims.rsa-dev.com/admin/">
             Claims Admin
           </.drawer_link>
           <.drawer_link href="https://infoweb.rsa-dev.com/admin">
-            Infoweb Admin
+            News Admin
           </.drawer_link>
           <.drawer_link href="https://leads.rsa-dev.com/admin">
             Leads Admin
