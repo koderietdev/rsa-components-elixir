@@ -56,8 +56,9 @@ defmodule RsaComponents.Input do
 
   attr :type, :string,
     default: "text",
-    values: ~w(checkbox color date datetime-local email file hidden month number password
-               range radio search select tel text text-array textarea time url week trix)
+    values: ~w(checkbox color date datetime-local datetime-local-zone email file hidden month
+               number password range radio search select tel text text-array textarea time url
+               week trix)
 
   attr :field, Phoenix.HTML.FormField,
     doc: "a form field struct retrieved from the form, for example: @form[:email]"
