@@ -28,7 +28,7 @@ defmodule RsaComponents.TopNavigation do
             </.link>
           </div>
         </div>
-        <nav class="flex flex-1 pl-10 py-2 gap-10 justify-end">
+        <nav class="flex flex-1 items-center gap-5 py-2 pl-4 sm:gap-10 sm:pl-10 justify-end">
           <.link
             :for={item <- @menu_item}
             :if={length(@menu_item) > 0}
@@ -37,9 +37,11 @@ defmodule RsaComponents.TopNavigation do
           >
             {render_slot(item)}
           </.link>
+          <%!-- Padded hit area keeps the burger touch-friendly and off the
+               screen edge on phones. --%>
           <div
             :if={not @hide_drawer}
-            class="cursor-pointer"
+            class="-mr-2 cursor-pointer p-2"
             phx-click={show_drawer("#drawer", "flex")}
           >
             <.menu_icon />
@@ -55,9 +57,11 @@ defmodule RsaComponents.TopNavigation do
 
   def drawer(assigns) do
     ~H"""
+    <%!-- Full width on phones (a fixed 480px would hang past the left edge),
+         capped at the familiar drawer width from sm and up. --%>
     <div
       id="drawer"
-      class="hidden w-[480px] flex-col px-16 z-40 absolute right-0 h-screen top-0 bg-white"
+      class="hidden w-full max-w-[480px] flex-col px-6 sm:px-16 z-40 absolute right-0 h-screen top-0 bg-white"
     >
       <div class="flex justify-end h-14 pt-10">
         <button class="" phx-click={hide_drawer("#drawer")}>
