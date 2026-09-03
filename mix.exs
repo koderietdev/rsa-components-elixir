@@ -7,9 +7,13 @@ defmodule RsaComponents.MixProject do
       version: "0.1.0",
       elixir: "~> 1.17",
       start_permanent: Mix.env() == :prod,
+      elixirc_paths: elixirc_paths(Mix.env()),
       deps: deps()
     ]
   end
+
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 
   # Run "mix help compile.app" to learn about applications.
   def application do
@@ -32,6 +36,7 @@ defmodule RsaComponents.MixProject do
       # {:styler, "~> 0.7", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.39.3", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.10", only: [:dev, :test], runtime: false},
+      {:floki, ">= 0.30.0", only: :test},
       {:tailwind, "~> 0.2", only: [:dev, :test], runtime: Mix.env() == :dev}
     ]
   end
