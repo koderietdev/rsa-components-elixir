@@ -29,11 +29,13 @@ defmodule RsaComponents.TopNavigation do
           </div>
         </div>
         <nav class="flex flex-1 items-center gap-5 py-2 pl-4 sm:gap-10 sm:pl-10 justify-end">
+          <%!-- On phones the logo, title, menu and burger do not fit on one
+               line, so the menu items move into the drawer below md. --%>
           <.link
             :for={item <- @menu_item}
             :if={length(@menu_item) > 0}
             navigate={item[:path]}
-            class="font-medium leading-8 text-sm hover:text-zinc-700 hover:underline"
+            class="hidden font-medium leading-8 text-sm hover:text-zinc-700 hover:underline md:inline"
           >
             {render_slot(item)}
           </.link>
@@ -49,11 +51,15 @@ defmodule RsaComponents.TopNavigation do
         </nav>
       </div>
     </header>
-    <.drawer :if={not @hide_drawer} current_user={@current_user} />
+    <.drawer :if={not @hide_drawer} current_user={@current_user} menu_item={@menu_item} />
     """
   end
 
   attr :current_user, :any
+
+  attr :menu_item, :list,
+    default: [],
+    doc: "The app's own menu items, shown in the drawer on phones"
 
   def drawer(assigns) do
     ~H"""
@@ -70,6 +76,16 @@ defmodule RsaComponents.TopNavigation do
       </div>
       <div id="drawer-content" class="w-full flex flex-1 flex-col justify-between">
         <nav class="flex flex-col">
+          <%!-- The app's own pages first, phones only; from md up they sit in
+               the header. Navigating re-renders the layout, which resets the
+               drawer to hidden. --%>
+          <.link
+            :for={item <- @menu_item}
+            navigate={item[:path]}
+            class="py-5 text-lg font-semibold leading-6 border-b border-[#EEEEF3] hover:text-zinc-700 hover:underline md:hidden"
+          >
+            {render_slot(item)}
+          </.link>
           <.drawer_link href="https://auth.rsa-dev.com/admin/">
             Users Admin
           </.drawer_link>
