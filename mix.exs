@@ -18,14 +18,15 @@ defmodule RsaComponents.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: [:logger],
+      mod: {RsaComponents.Application, []}
     ]
   end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:tails, "~> 0.1.5"},
+      {:tw_merge, "~> 0.1.1"},
       {:phoenix_live_view, "~> 1.1"},
       # {:live_select, "~> 1.4.0"},
       {:live_select, "~> 1.7"},
