@@ -4,7 +4,7 @@ defmodule RsaComponents do
     quote do
       use Phoenix.Component
 
-      import Tails, only: [classes: 1]
+      import RsaComponents.Tailwind, only: [classes: 1]
 
       alias Phoenix.LiveView.JS
     end
