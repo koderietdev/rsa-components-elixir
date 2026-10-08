@@ -53,7 +53,7 @@ defmodule RsaComponents.Table do
             <.table_cell
               :for={{col, i} <- Enum.with_index(@col)}
               phx-click={@row_click && @row_click.(row)}
-              class={[@row_click && "hover:cursor-pointer"]}
+              class={@row_click && "hover:cursor-pointer"}
             >
               <span class={[i == 0 && "font-semibold text-zinc-900"]}>
                 <%= render_slot(col, @row_item.(row)) %>
