@@ -82,7 +82,7 @@ defmodule RsaComponents.Input do
   attr :rest, :global,
     include: ~w(accept autocomplete capture cols disabled form list max maxlength min minlength
          multiple pattern placeholder readonly required rows size step phx-key phx-keyup phx-keydown
-         debounce mode timezone)
+         debounce mode timezone value_mapper)
 
   slot :inner_block
 
