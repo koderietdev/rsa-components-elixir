@@ -40,10 +40,10 @@ defmodule RsaComponents.Table do
         <.table_header>
           <.table_row is_header={false}>
             <.table_head :for={col <- @col} class="w-[100px]">
-              <%= col[:label] %>
+              {col[:label]}
             </.table_head>
             <.table_head class="w-14">
-              <span class="sr-only"><%= @actions_title %></span>
+              <span class="sr-only">{@actions_title}</span>
             </.table_head>
           </.table_row>
         </.table_header>
@@ -56,16 +56,16 @@ defmodule RsaComponents.Table do
               class={@row_click && "hover:cursor-pointer"}
             >
               <span class={[i == 0 && "font-semibold text-zinc-900"]}>
-                <%= render_slot(col, @row_item.(row)) %>
+                {render_slot(col, @row_item.(row))}
               </span>
             </.table_cell>
-            <.table_cell if={@action != []} class="w-14 p-0">
+            <.table_cell :if={@action != []} class="w-14 p-0">
               <div class="relative whitespace-nowrap w-14 text-right text-sm font-medium pr-2">
                 <span
                   :for={action <- @action}
                   class="ml-4 font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
                 >
-                  <%= render_slot(action, @row_item.(row)) %>
+                  {render_slot(action, @row_item.(row))}
                 </span>
               </div>
             </.table_cell>
@@ -88,7 +88,7 @@ defmodule RsaComponents.Table do
       }
       {@rest}
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </thead>
     """
   end
@@ -110,7 +110,7 @@ defmodule RsaComponents.Table do
       }
       {@rest}
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </tr>
     """
   end
@@ -130,7 +130,7 @@ defmodule RsaComponents.Table do
       }
       {@rest}
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </th>
     """
   end
@@ -149,7 +149,7 @@ defmodule RsaComponents.Table do
       class={classes(["[&_tr:last-child]:border-0", @class])}
       {@rest}
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </tbody>
     """
   end
@@ -161,7 +161,7 @@ defmodule RsaComponents.Table do
   def table_cell(assigns) do
     ~H"""
     <td class={classes(["px-3 py-5 align-middle [&:has([role=checkbox])]:pr-0", @class])} {@rest}>
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </td>
     """
   end
@@ -184,7 +184,7 @@ defmodule RsaComponents.Table do
       }
       {@rest}
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </div>
     """
   end
@@ -196,7 +196,7 @@ defmodule RsaComponents.Table do
   def table_caption(assigns) do
     ~H"""
     <caption class={classes(["mt-4 text-sm text-muted-foreground", @class])} {@rest}>
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </caption>
     """
   end
