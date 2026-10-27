@@ -1,8 +1,6 @@
 defmodule RsaComponents.CoreComponents do
   use RsaComponents, :component
 
-  @link_default "#1A2BAD"
-
   @doc """
   Renders a button.
 
@@ -30,7 +28,7 @@ defmodule RsaComponents.CoreComponents do
       }
       {@rest}
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </button>
     """
   end

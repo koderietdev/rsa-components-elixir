@@ -225,7 +225,7 @@ defmodule RsaComponents.Input do
         {@rest}
         {live_select_classes(quick_select: quick_select?(@rest))}
       >
-        <:option :let={%{label: label, value: value, selected: selected}}>
+        <:option :let={%{label: label, value: _value, selected: selected}}>
           <%= if quick_select?(@rest) do %>
             <div class="flex justify-content items-center">
               <input
@@ -243,18 +243,6 @@ defmodule RsaComponents.Input do
       <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
-  end
-
-  def normalize_value_with_zone("datetime-local-zone", %struct{} = value, zone \\ "Europe/Oslo")
-      when struct in [NaiveDateTime, DateTime] do
-    <<date::10-binary, ?\s, hour_minute::5-binary, _rest::binary>> =
-      to_string(DateTime.shift_zone!(value, zone))
-
-    {:safe, [date, ?T, hour_minute]}
-  end
-
-  def normalize_value_with_zone(_type, value, zone) do
-    value
   end
 
   def input(%{type: "datetime-local-zone"} = assigns) do
@@ -310,6 +298,20 @@ defmodule RsaComponents.Input do
       <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
+  end
+
+  def normalize_value_with_zone(type, value, zone \\ "Europe/Oslo")
+
+  def normalize_value_with_zone("datetime-local-zone", %struct{} = value, zone)
+      when struct in [NaiveDateTime, DateTime] do
+    <<date::10-binary, ?\s, hour_minute::5-binary, _rest::binary>> =
+      to_string(DateTime.shift_zone!(value, zone))
+
+    {:safe, [date, ?T, hour_minute]}
+  end
+
+  def normalize_value_with_zone(_type, value, _zone) do
+    value
   end
 
   defp input_size_classes(size) do
