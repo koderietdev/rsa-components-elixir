@@ -14,6 +14,16 @@ defmodule RsaComponents.TopNavigation do
     attr :path, :string
   end
 
+  slot :menu_dropdown,
+    doc: """
+    A menu entry that opens a list instead of a page. Its content is the
+    list, shown under the label in the header and in the drawer on phones.
+    It is rendered in both places, so give nothing inside it an id.
+    """ do
+    attr :id, :string, required: true
+    attr :label, :string, required: true
+  end
+
   def top_navigation(assigns) do
     ~H"""
     <header class={["h-24 px-4 flex items-center sm:px-6 lg:px-16", @class]}>
@@ -39,6 +49,25 @@ defmodule RsaComponents.TopNavigation do
           >
             {render_slot(item)}
           </.link>
+          <div :for={dropdown <- @menu_dropdown} class="relative hidden md:block">
+            <button
+              type="button"
+              aria-haspopup="true"
+              aria-controls={"#{dropdown.id}-list"}
+              class="flex items-center gap-1 font-medium leading-8 text-sm hover:text-zinc-700 hover:underline"
+              phx-click={JS.toggle(to: "##{dropdown.id}-list")}
+            >
+              {dropdown.label}
+              <.icon name="hero-chevron-down-mini" class="size-4" />
+            </button>
+            <div
+              id={"#{dropdown.id}-list"}
+              class="hidden absolute right-0 top-full z-20 mt-2 min-w-48 rounded-lg border border-[#EEEEF3] bg-white py-2 shadow-lg"
+              phx-click-away={JS.hide(to: "##{dropdown.id}-list")}
+            >
+              {render_slot(dropdown)}
+            </div>
+          </div>
           <%!-- Padded hit area keeps the burger touch-friendly and off the
                screen edge on phones. --%>
           <div
@@ -51,7 +80,12 @@ defmodule RsaComponents.TopNavigation do
         </nav>
       </div>
     </header>
-    <.drawer :if={not @hide_drawer} current_user={@current_user} menu_item={@menu_item} />
+    <.drawer
+      :if={not @hide_drawer}
+      current_user={@current_user}
+      menu_item={@menu_item}
+      menu_dropdown={@menu_dropdown}
+    />
     """
   end
 
@@ -60,6 +94,10 @@ defmodule RsaComponents.TopNavigation do
   attr :menu_item, :list,
     default: [],
     doc: "The app's own menu items, shown in the drawer on phones"
+
+  attr :menu_dropdown, :list,
+    default: [],
+    doc: "The app's own dropdowns, shown as open lists in the drawer on phones"
 
   def drawer(assigns) do
     ~H"""
@@ -86,6 +124,13 @@ defmodule RsaComponents.TopNavigation do
           >
             {render_slot(item)}
           </.link>
+          <div
+            :for={dropdown <- @menu_dropdown}
+            class="py-5 border-b border-[#EEEEF3] md:hidden"
+          >
+            <div class="text-lg font-semibold leading-6">{dropdown.label}</div>
+            <div class="mt-2">{render_slot(dropdown)}</div>
+          </div>
           <.drawer_link href="https://auth.rsa-dev.com/admin/">
             Users Admin
           </.drawer_link>
