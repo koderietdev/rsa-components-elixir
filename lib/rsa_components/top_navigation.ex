@@ -22,6 +22,9 @@ defmodule RsaComponents.TopNavigation do
     """ do
     attr :id, :string, required: true
     attr :label, :string, required: true
+
+    attr :class, :string,
+      doc: "Classes for the entry in the header, such as a width when the label changes"
   end
 
   def top_navigation(assigns) do
@@ -49,7 +52,10 @@ defmodule RsaComponents.TopNavigation do
           >
             {render_slot(item)}
           </.link>
-          <div :for={dropdown <- @menu_dropdown} class="relative hidden md:block">
+          <div
+            :for={dropdown <- @menu_dropdown}
+            class={["relative hidden md:block", dropdown[:class]]}
+          >
             <button
               type="button"
               aria-haspopup="true"

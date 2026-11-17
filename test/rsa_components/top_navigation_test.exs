@@ -25,7 +25,7 @@ defmodule RsaComponents.TopNavigationTest do
     ~H"""
     <RsaComponents.TopNavigation.top_navigation title="Vehicles" current_user={nil}>
       <:menu_item path="/admin">Dashboard</:menu_item>
-      <:menu_dropdown id="country-menu" label="Country">
+      <:menu_dropdown id="country-menu" label="Country" class="w-32">
         <button>Norway</button>
       </:menu_dropdown>
     </RsaComponents.TopNavigation.top_navigation>
@@ -74,6 +74,10 @@ defmodule RsaComponents.TopNavigationTest do
     assert Floki.text(button) =~ "Country"
     assert Floki.attribute(button, "phx-click") != []
     assert Floki.attribute(button, "aria-expanded") == ["false"]
+
+    # The app can hold the entry at one width, so a changing label does not move the menu.
+    assert [entry] = Floki.find(doc, "header nav div.w-32")
+    assert Floki.find(entry, "#country-menu-list") != []
 
     # The chevron tells it apart from the links beside it.
     assert [_chevron] = Floki.find(button, "svg#country-menu-chevron")
