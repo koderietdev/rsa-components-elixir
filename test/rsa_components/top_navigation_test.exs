@@ -73,6 +73,10 @@ defmodule RsaComponents.TopNavigationTest do
     assert [button] = Floki.find(doc, "header nav button[aria-controls=country-menu-list]")
     assert Floki.text(button) =~ "Country"
     assert Floki.attribute(button, "phx-click") != []
+    assert Floki.attribute(button, "aria-expanded") == ["false"]
+
+    # The chevron tells it apart from the links beside it.
+    assert [_chevron] = Floki.find(button, "svg#country-menu-chevron")
 
     assert [list] = Floki.find(doc, "header nav #country-menu-list")
     assert class_of(list) =~ "hidden"
