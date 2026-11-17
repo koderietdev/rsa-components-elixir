@@ -14,6 +14,16 @@ defmodule RsaComponents.TopNavigation do
     attr :path, :string
   end
 
+  slot :menu_dropdown,
+    doc: """
+    A menu entry that opens a list instead of a page. Its content is the
+    list, shown under the label in the header and in the drawer on phones.
+    It is rendered in both places, so give nothing inside it an id.
+    """ do
+    attr :id, :string, required: true
+    attr :label, :string, required: true
+  end
+
   def top_navigation(assigns) do
     ~H"""
     <header class={["h-24 px-4 flex items-center sm:px-6 lg:px-16", @class]}>
@@ -39,6 +49,26 @@ defmodule RsaComponents.TopNavigation do
           >
             {render_slot(item)}
           </.link>
+          <div :for={dropdown <- @menu_dropdown} class="relative hidden md:block">
+            <button
+              type="button"
+              aria-haspopup="true"
+              aria-controls={"#{dropdown.id}-list"}
+              aria-expanded="false"
+              class="group flex items-center gap-1 font-medium leading-8 text-sm hover:text-zinc-700"
+              phx-click={toggle_dropdown(dropdown.id)}
+            >
+              <span class="group-hover:underline">{dropdown.label}</span>
+              <.chevron_icon id={"#{dropdown.id}-chevron"} />
+            </button>
+            <div
+              id={"#{dropdown.id}-list"}
+              class="hidden absolute right-0 top-full z-20 mt-2 min-w-48 rounded-lg border border-[#EEEEF3] bg-white py-2 shadow-lg"
+              phx-click-away={close_dropdown(dropdown.id)}
+            >
+              {render_slot(dropdown)}
+            </div>
+          </div>
           <%!-- Padded hit area keeps the burger touch-friendly and off the
                screen edge on phones. --%>
           <div
@@ -51,8 +81,26 @@ defmodule RsaComponents.TopNavigation do
         </nav>
       </div>
     </header>
-    <.drawer :if={not @hide_drawer} current_user={@current_user} menu_item={@menu_item} />
+    <.drawer
+      :if={not @hide_drawer}
+      current_user={@current_user}
+      menu_item={@menu_item}
+      menu_dropdown={@menu_dropdown}
+    />
     """
+  end
+
+  # The chevron points down while the list is closed and up while it is open.
+  defp toggle_dropdown(id) do
+    JS.toggle(to: "##{id}-list")
+    |> JS.toggle_class("rotate-180", to: "##{id}-chevron")
+    |> JS.toggle_attribute({"aria-expanded", "true", "false"})
+  end
+
+  defp close_dropdown(id) do
+    JS.hide(to: "##{id}-list")
+    |> JS.remove_class("rotate-180", to: "##{id}-chevron")
+    |> JS.set_attribute({"aria-expanded", "false"}, to: "[aria-controls=#{id}-list]")
   end
 
   attr :current_user, :any
@@ -60,6 +108,10 @@ defmodule RsaComponents.TopNavigation do
   attr :menu_item, :list,
     default: [],
     doc: "The app's own menu items, shown in the drawer on phones"
+
+  attr :menu_dropdown, :list,
+    default: [],
+    doc: "The app's own dropdowns, shown as open lists in the drawer on phones"
 
   def drawer(assigns) do
     ~H"""
@@ -86,6 +138,13 @@ defmodule RsaComponents.TopNavigation do
           >
             {render_slot(item)}
           </.link>
+          <div
+            :for={dropdown <- @menu_dropdown}
+            class="py-5 border-b border-[#EEEEF3] md:hidden"
+          >
+            <div class="text-lg font-semibold leading-6">{dropdown.label}</div>
+            <div class="mt-2">{render_slot(dropdown)}</div>
+          </div>
           <.drawer_link href="https://auth.rsa-dev.com/admin/">
             Users Admin
           </.drawer_link>
@@ -171,6 +230,33 @@ defmodule RsaComponents.TopNavigation do
       <path
         style="clip-path:url(#SVGID_00000098206489256643427130000009073784550274316196_);fill:#fff"
         d="M90.2 47.3c0-12.4-8-16.5-20.9-16.5H34.6v49.6H49V63.9h14.3l10.6 16.5h16.4L79 62.8c6.1-1.6 11.2-5.7 11.2-15.5m-21.5 5.6H49V42.5h19.8c5 0 7.2 1.3 7.2 5.2-.1 3.9-2.2 5.2-7.3 5.2m88 11.3c0 10.6-6.1 17.1-29.5 17.1-21.7 0-27.6-7.4-30.1-14l14.9-2.1c1.8 3.2 6 5.1 15.1 5.1 10.2 0 15.4-.6 15.4-4.5 0-3.8-5.3-3.1-17.2-4.3s-26.6-1.8-26.6-15.4 12.8-16.3 27.7-16.3c14.6 0 26.5 4.5 29.5 13.9L141.1 46c-1.2-3.8-7.8-4.9-15.2-4.9-7.4 0-12.9 1-12.9 4 0 3.2 2.7 3.4 15.5 4.2 15.3.9 28.2 2.8 28.2 14.9m27.4-33.4-25.4 49.6h14.6l4.3-8.4h28.2l4.3 8.4H226l-25.3-49.6h-16.6zM183 61.7l8.8-17.4 8.8 17.4H183z"
+      />
+    </svg>
+    """
+  end
+
+  attr :id, :string, required: true
+
+  # Drawn here instead of with a hero icon class, so it shows in every app
+  # whatever icons its stylesheet was built with.
+  defp chevron_icon(assigns) do
+    ~H"""
+    <svg
+      id={@id}
+      class="transition-transform"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <path
+        d="M4.5 6.25 8 9.75l3.5-3.5"
+        stroke="currentColor"
+        stroke-width="1.6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
       />
     </svg>
     """
